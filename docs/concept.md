@@ -119,10 +119,26 @@ TODO: there are probably 2 or 3 main inerfaces of the app. First, a read-only AP
 - Is the interface read-only or does it also allow writing? For example, could a client application also create or edit data instead of just reading it? In that case, what about rules, could they also be created or edited through the interface? And what about writing values to fields that are governed by a value determination rule?
 ```
 
-
 ### TBD: Deployment Model
 
+#### Problem 
+
 TODO: this is probably one of the biggest and most central question marks and probably depends on the storage backend approach we choose (see "TBD: Storage Backend and Version Control") and also influences the user interface concerns (see "TBD: User Interface"). In other words, where does stuff run? Is there a central deployed runtime that implements all functionality (maybe including the API) and that a potential web-based GUI interface and a command-line interface connect to as clients? Or is the runtime logic implemented in each user interface application (i.e. in the GUI web app and in the CLI and the read aspects in the API)? Also this does not yet address the storage backend decision, i.e. where the data lives (see "TBD: Storage Backend and Version Control") but assuming that the storage backend could indeed be a Git repo, at least this aspect could be factored out from the deployment model.
+
+#### Vision (draft)
+
+- Storage backend with source-of-truth data on GitHub (to be verified)
+- Central backend containing all business logic and exposing an internal API
+- User API, web app, and CLI all talk to the central backend (the user API and the internal API are separate layers)
+- Central backend, user API, and web app bundled as a single deployment unit (still logically separated)
+- CLI locally installed on demand
+- TODO: what deployment platform and how does the deployment bundle look like?
+
+Discarded options:
+
+- No backend, but business logic in individual client applications (user API, web app, CLI): code duplication, feature drift, etc.
+- Serverless solutios for backend, user API, and web app (e.g. AWS API Gateway, Kong, Nginx, AWS Lambda, Cloudflare Workers, Vercel Functions, etc.): tight coupling to provider, not necessarily easier deployment and maintenance, might require Terraform
+- Web app not co-located with backend but deployed as a regular web app or static web app independently (e.g. on GitHub Pages): additional deployment complexity for no apparent benefit.
 
 ---
 
